@@ -1,15 +1,15 @@
-package org.example.center02;
+package org.example.chenduoduo;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("org.example.center02.mapper")
-public class Center02Application {
+@MapperScan("org.example.chenduoduo.mapper")
+public class chenduoduoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Center02Application.class, args);
+        SpringApplication.run(chenduoduoApplication.class, args);
     }
 
 }

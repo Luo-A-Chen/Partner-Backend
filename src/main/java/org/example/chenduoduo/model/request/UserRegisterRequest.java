@@ -1,4 +1,4 @@
-package org.example.center02.model.request;
+package org.example.chenduoduo.model.request;
 
 import lombok.Data;
 

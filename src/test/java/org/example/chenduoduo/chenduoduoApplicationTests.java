@@ -1,4 +1,4 @@
-//package org.example.center02;
+//package org.example.chenxinbackend;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.boot.test.context.SpringBootTest;
@@ -9,7 +9,7 @@
 //import java.security.NoSuchAlgorithmException;
 //
 //@SpringBootTest
-//class Center02ApplicationTests {
+//class chenduoduobackendApplicationTests {
 //    @Test
 //    void testDigest() throws NoSuchAlgorithmException {
 //    }

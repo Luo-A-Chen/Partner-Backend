@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Center02
+    name: chenxinbackend
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: 'jdbc:mysql://localhost:3306/prod?createDatabaseIfNotExist=true&useSSL=false'

@@ -1,25 +1,24 @@
-package org.example.center02.controller;
+package org.example.chenduoduo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
-import org.example.center02.common.BaseResponse;
-import org.example.center02.common.ErrorCode;
-import org.example.center02.common.ResultUtils;
-import org.example.center02.exception.BusinessException;
-import org.example.center02.model.User;
-import org.example.center02.model.request.UserLoginRequest;
-import org.example.center02.model.request.UserRegisterRequest;
-import org.example.center02.service.UserService;
+import org.example.chenduoduo.common.BaseResponse;
+import org.example.chenduoduo.common.ErrorCode;
+import org.example.chenduoduo.common.ResultUtils;
+import org.example.chenduoduo.exception.BusinessException;
+import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.model.request.UserLoginRequest;
+import org.example.chenduoduo.model.request.UserRegisterRequest;
+import org.example.chenduoduo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.example.center02.Constant.UserConstant.ADMIN_ROLE;
-import static org.example.center02.Constant.UserConstant.USER_LOGIN_STATE;
+import static org.example.chenduoduo.Constant.UserConstant.ADMIN_ROLE;
+import static org.example.chenduoduo.Constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * @author luochen

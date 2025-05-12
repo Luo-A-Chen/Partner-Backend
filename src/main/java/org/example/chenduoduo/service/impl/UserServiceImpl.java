@@ -1,4 +1,4 @@
-package org.example.center02.service.impl;
+package org.example.chenduoduo.service.impl;
 
 import java.util.Date;
 
@@ -8,11 +8,11 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.example.center02.common.ErrorCode;
-import org.example.center02.exception.BusinessException;
-import org.example.center02.model.User;
-import org.example.center02.service.UserService;
-import org.example.center02.mapper.UserMapper;
+import org.example.chenduoduo.common.ErrorCode;
+import org.example.chenduoduo.exception.BusinessException;
+import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.service.UserService;
+import org.example.chenduoduo.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 

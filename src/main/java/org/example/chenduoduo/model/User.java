@@ -1,4 +1,4 @@
-package org.example.center02.model;
+package org.example.chenduoduo.model;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package org.example.center02.service;
+package org.example.chenduoduo.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.center02.model.User;
+import org.example.chenduoduo.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

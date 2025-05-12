@@ -1,9 +1,9 @@
-package org.example.center02.exception;
+package org.example.chenduoduo.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.center02.common.BaseResponse;
-import org.example.center02.common.ErrorCode;
-import org.example.center02.common.ResultUtils;
+import org.example.chenduoduo.common.BaseResponse;
+import org.example.chenduoduo.common.ErrorCode;
+import org.example.chenduoduo.common.ResultUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

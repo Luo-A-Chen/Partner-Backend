@@ -1,6 +1,6 @@
-package org.example.center02.exception;
+package org.example.chenduoduo.exception;
 
-import org.example.center02.common.ErrorCode;
+import org.example.chenduoduo.common.ErrorCode;
 
 /**
  * @author luochen

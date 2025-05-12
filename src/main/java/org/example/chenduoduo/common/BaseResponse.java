@@ -1,4 +1,4 @@
-package org.example.center02.common;
+package org.example.chenduoduo.common;
 
 import lombok.Data;
 
