@@ -1,9 +1,11 @@
 package org.example.chenduoduo.service.impl;
 
-import java.util.Date;
+import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +16,12 @@ import org.example.chenduoduo.model.User;
 import org.example.chenduoduo.service.UserService;
 import org.example.chenduoduo.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author luochen
@@ -96,8 +100,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
-    public User userLogin(String userAccount, String userPassword, HttpServletRequest request)
-    {
+    public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         //不能为空
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"参数为空");
@@ -173,6 +176,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //移除用户登录态
         request.getSession().removeAttribute(USER_LOGIN_STATE);
         return 1;
+    }
+
+    /**
+     * 根据标签搜索用户
+     * @param tagNameList
+     * @return
+     */
+    @Override
+    public List<User> searchUsersByTags(List<String> tagNameList) {
+        if(CollectionUtils.isEmpty(tagNameList)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        List<User> userList = userMapper.selectList(queryWrapper);
+        Gson gson=new Gson();
+        return userList.stream().filter(user -> {
+            String tagsJson = user.getTags();
+            Set<String> tempTagNameSet = gson.fromJson(tagsJson, new TypeToken<Set<String>>() {}.getType());
+            tempTagNameSet= Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
+            for (String tagName : tagNameList){
+                if (!tempTagNameSet.contains(tagName)){
+                    return false;
+                }
+            }
+            return true;
+        }).map(this::getSafetyUser).collect(Collectors.toList());
     }
 
 

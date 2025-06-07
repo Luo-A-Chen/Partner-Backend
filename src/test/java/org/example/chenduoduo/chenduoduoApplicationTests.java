@@ -1,4 +1,4 @@
-//package org.example.chenxinbackend;
+//package org.example.chenduoduobackend;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.boot.test.context.SpringBootTest;
@@ -10,12 +10,6 @@
 //
 //@SpringBootTest
 //class chenduoduobackendApplicationTests {
-//    @Test
-//    void testDigest() throws NoSuchAlgorithmException {
-//    }
 //
-//    @Test
-//    void contextLoads() {
-//    }
 //
 //}

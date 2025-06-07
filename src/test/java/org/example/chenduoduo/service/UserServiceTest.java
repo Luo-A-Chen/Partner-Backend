@@ -1,8 +1,8 @@
-//package org.example.chenxinbackend.service;
+//package org.example.chenduoduobackend.service;
 //import java.util.Date;
 //
 //import jakarta.annotation.Resource;
-//import org.example.chenxinbackend.model.User;
+//import org.example.chenduoduobackend.model.User;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.boot.test.context.SpringBootTest;

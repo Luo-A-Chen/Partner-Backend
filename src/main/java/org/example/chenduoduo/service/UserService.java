@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.chenduoduo.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @author luochen
  * @description 针对表user的服务类
@@ -42,4 +44,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     int userLogout(HttpServletRequest request);
+    /**
+     * 根据标签搜索用户
+     * @param tagNameList
+     * @return
+     */
+    List<User> searchUsersByTags(List<String> tagNameList);
 }

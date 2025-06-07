@@ -3,7 +3,9 @@ package org.example.chenduoduo.model;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serial;
 import java.util.Date;
+import java.io.Serializable;
 
 /**
  * 
@@ -11,7 +13,7 @@ import java.util.Date;
  */
 @TableName(value ="user")
 @Data
-public class User {
+public class User implements Serializable{
     /**
      * 
      */
@@ -84,6 +86,14 @@ public class User {
      */
     private String planetCode;
 
+    /**
+     * 用户标签
+     */
+    private String tags;
+
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+
 }

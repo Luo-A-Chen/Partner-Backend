@@ -12,6 +12,7 @@ import org.example.chenduoduo.model.User;
 import org.example.chenduoduo.model.request.UserLoginRequest;
 import org.example.chenduoduo.model.request.UserRegisterRequest;
 import org.example.chenduoduo.service.UserService;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -85,9 +86,9 @@ public class UserController {
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request){
         //仅管理员可以查询
-        if(!isAdmin(request)){
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
+//        if(!isAdmin(request)){
+//            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+//        }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if(StringUtils.isNotBlank(username)){
             queryWrapper.like("username",username);
@@ -98,6 +99,22 @@ public class UserController {
             return userService.getSafetyUser(user);
         }).collect(Collectors.toList());
         return ResultUtils.success(list);
+    }
+    @GetMapping("/search/tags")
+    public BaseResponse<List<User>> searchUsersByTags(List<String> tagNameList){
+        if(CollectionUtils.isEmpty(tagNameList)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<User> userList =userService.searchUsersByTags(tagNameList);
+        return ResultUtils.success(userList);
+    }
+    @GetMapping("/update")
+    public BaseResponse<Integer> updateUser(User user){
+        //校验参数是否为空
+        if(user==null){
+
+        }
+        //
     }
     @GetMapping("/delete")
     public BaseResponse<Boolean>deleteUser(@RequestBody Long id,HttpServletRequest request){
