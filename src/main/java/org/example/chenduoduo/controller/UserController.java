@@ -26,6 +26,7 @@ import static org.example.chenduoduo.Constant.UserConstant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = {"http://localhost:5173"},allowCredentials = "true")
 public class UserController {
     @Resource
     private UserService userService;
@@ -60,6 +61,9 @@ public class UserController {
         return ResultUtils.success(user);
     }
 
+    /**
+     * 注销
+     */
     @PostMapping("/logout")
     public BaseResponse<Integer>usersLogout(HttpServletRequest request){
         if(request == null){
@@ -86,14 +90,13 @@ public class UserController {
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request){
         //仅管理员可以查询
-//        if(!isAdmin(request)){
-//            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-//        }
+        if(!userService.isAdmin(request)){
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if(StringUtils.isNotBlank(username)){
             queryWrapper.like("username",username);
         }
-
         List<User> userlist = userService.list(queryWrapper);
         List<User> list = userlist.stream().map(user -> {
             return userService.getSafetyUser(user);
@@ -101,25 +104,30 @@ public class UserController {
         return ResultUtils.success(list);
     }
     @GetMapping("/search/tags")
-    public BaseResponse<List<User>> searchUsersByTags(List<String> tagNameList){
+    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList){
         if(CollectionUtils.isEmpty(tagNameList)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         List<User> userList =userService.searchUsersByTags(tagNameList);
         return ResultUtils.success(userList);
     }
-//    @GetMapping("/update")
-//    public BaseResponse<Integer> updateUser(User user){
-//        //校验参数是否为空
-//        if(user==null){
-//
-//        }
-//        //
-//    }
+    @PostMapping("/update")
+    public BaseResponse<Integer> updateUser(@RequestBody  User user,HttpServletRequest request){
+        //校验参数是否为空
+        if(user==null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //校验权限
+        User loginUser = userService.getLoginUser(request);
+        //触发更新
+        Integer userUpdate = userService.updateUser(user,loginUser);
+        return ResultUtils.success(userUpdate);
+
+    }
     @GetMapping("/delete")
     public BaseResponse<Boolean>deleteUser(@RequestBody Long id,HttpServletRequest request){
         //仅管理员可以查询
-        if(!isAdmin(request)){
+        if(!userService.isAdmin(request)){
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         if(id <=0){
@@ -127,14 +135,5 @@ public class UserController {
         }
         boolean byId = userService.removeById(id);
         return ResultUtils.success(byId);
-    }
-    /**
-     * 是否为管理员
-     */
-    private boolean isAdmin(HttpServletRequest request){
-        // 仅管理员可查询
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
-        User user = (User) userObj;
-        return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 }

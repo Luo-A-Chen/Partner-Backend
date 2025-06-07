@@ -23,6 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static org.example.chenduoduo.Constant.UserConstant.ADMIN_ROLE;
+
 /**
  * @author luochen
  * @description 用户服务实现类，具体为注册实现类
@@ -48,40 +50,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public long userRegister(String userAccount, String userPassword, String checkPassword, String planetCode) {
         //1.校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"参数为空");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         if (userAccount.length() < 4) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户名长度小于4");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户名长度小于4");
         }
         if (userPassword.length() < 8 || checkPassword.length() < 8) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码长度小于8");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度小于8");
         }
-        if(planetCode.length()>5){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"星球编号长度大于5");
+        if (planetCode.length() > 5) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号长度大于5");
         }
         //账户不能包含特殊字符
         String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户名包含特殊字符");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户名包含特殊字符");
         }
         //密码和校验密码相同
         if (!userPassword.equals(checkPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码和校验密码不一致");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码和校验密码不一致");
         }
         //账户不能重复
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
         long count = this.count(queryWrapper);
         if (count > 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户名重复");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户名重复");
         }
         //星球编号不能重复
-        queryWrapper= new QueryWrapper<>();
+        queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("planetCode", planetCode);
         count = this.count(queryWrapper);
         if (count > 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"星球编号重复");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号重复");
         }
         //对密码进行加密
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + "myPassword").getBytes());
@@ -93,7 +95,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setPlanetCode(planetCode);
         boolean saveresult = this.save(user);
         if (!saveresult) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"插入数据失败");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "插入数据失败");
         }
         return user.getId();
     }
@@ -103,21 +105,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         //不能为空
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"参数为空");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         //账户不能小于4位
         if (userAccount.length() < 4) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户名长度小于4");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户名长度小于4");
         }
         //密码不能小于8位
         if (userPassword.length() < 8) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码长度小于8");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度小于8");
         }
         //账户不能包含特殊字符
         String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户名包含特殊字符");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户名包含特殊字符");
         }
         //对密码进行加密
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + "myPassword").getBytes());
@@ -129,7 +131,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //用户不存在
         if (user == null) {
             log.info("user login failed,userAccount cannot match userPassword");
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"用户不存在或密码错误");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         //用户脱敏，去掉用户密码
         User safetyUser = getSafetyUser(user);
@@ -141,13 +143,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 用户脱敏
+     *
      * @param originUser
      * @return
      */
     @Override
     public User getSafetyUser(User originUser) {
-        if(originUser == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"用户不存在");
+        if (originUser == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         //用户脱敏，去掉用户密码
         User safetyUser = new User();
@@ -164,10 +167,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setCreateTime(originUser.getCreateTime());
         safetyUser.setUpdateTime(new Date());
         return safetyUser;
-     }
+    }
 
-     /**
+    /**
      * 用户注销
+     *
      * @param request
      * @return
      */
@@ -180,23 +184,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 根据标签搜索用户
+     *
      * @param tagNameList
      * @return
      */
     @Override
     public List<User> searchUsersByTags(List<String> tagNameList) {
-        if(CollectionUtils.isEmpty(tagNameList)){
+        if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         List<User> userList = userMapper.selectList(queryWrapper);
-        Gson gson=new Gson();
+        Gson gson = new Gson();
         return userList.stream().filter(user -> {
             String tagsJson = user.getTags();
-            Set<String> tempTagNameSet = gson.fromJson(tagsJson, new TypeToken<Set<String>>() {}.getType());
-            tempTagNameSet= Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
-            for (String tagName : tagNameList){
-                if (!tempTagNameSet.contains(tagName)){
+            Set<String> tempTagNameSet = gson.fromJson(tagsJson, new TypeToken<Set<String>>() {
+            }.getType());
+            tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
+            for (String tagName : tagNameList) {
+                if (!tempTagNameSet.contains(tagName)) {
                     return false;
                 }
             }
@@ -204,7 +210,66 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }).map(this::getSafetyUser).collect(Collectors.toList());
     }
 
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public Integer updateUser(User user, User loginUser) {
+        long userId=user.getId();
+        if (userId<=0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //分管理员和普通用户,修改信息的逻辑不同
+        if (isAdmin(loginUser)&&user.getId()!= loginUser.getId()) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        User userById = userMapper.selectById(userId);
+        if(userById==null){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        return userMapper.updateById(user);
+    }
 
+    /**
+     * 获取当前登录用户信息
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public User getLoginUser(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        Object user = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+        return (User) user;
+    }
+
+    /**
+     * 是否为管理员
+     */
+    @Override
+    public boolean isAdmin(HttpServletRequest request) {
+        // 仅管理员可查询
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) userObj;
+        return user != null && user.getUserRole() == ADMIN_ROLE;
+    }
+
+    /**
+     * 是否为管理员重载
+     */
+    @Override
+    public boolean isAdmin(User user) {
+        // 仅管理员可查询
+        return user != null && user.getUserRole() == ADMIN_ROLE;
+    }
 }
 
 
