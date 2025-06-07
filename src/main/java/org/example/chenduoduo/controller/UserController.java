@@ -108,14 +108,14 @@ public class UserController {
         List<User> userList =userService.searchUsersByTags(tagNameList);
         return ResultUtils.success(userList);
     }
-    @GetMapping("/update")
-    public BaseResponse<Integer> updateUser(User user){
-        //校验参数是否为空
-        if(user==null){
-
-        }
-        //
-    }
+//    @GetMapping("/update")
+//    public BaseResponse<Integer> updateUser(User user){
+//        //校验参数是否为空
+//        if(user==null){
+//
+//        }
+//        //
+//    }
     @GetMapping("/delete")
     public BaseResponse<Boolean>deleteUser(@RequestBody Long id,HttpServletRequest request){
         //仅管理员可以查询
