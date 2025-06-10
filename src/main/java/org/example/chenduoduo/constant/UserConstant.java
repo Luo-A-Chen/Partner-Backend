@@ -1,4 +1,4 @@
-package org.example.chenduoduo.Constant;
+package org.example.chenduoduo.constant;
 
 public interface UserConstant {
     /**

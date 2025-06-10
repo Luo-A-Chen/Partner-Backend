@@ -1,6 +1,7 @@
 package org.example.chenduoduo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.example.chenduoduo.Constant.UserConstant.ADMIN_ROLE;
-import static org.example.chenduoduo.Constant.UserConstant.USER_LOGIN_STATE;
+import static org.example.chenduoduo.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * @author luochen
@@ -111,16 +110,22 @@ public class UserController {
         List<User> userList =userService.searchUsersByTags(tagNameList);
         return ResultUtils.success(userList);
     }
+    @GetMapping("/recommend")
+    public BaseResponse<Page<User>> recommendUsers(int pageSize,int pageNum,HttpServletRequest request){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        //对当前用户进行分页处理
+        Page<User> userList = userService.page(new Page<>(pageNum,  pageSize), queryWrapper);
+        return ResultUtils.success(userList);
+    }
     @PostMapping("/update")
-    public BaseResponse<Integer> updateUser(@RequestBody  User user,HttpServletRequest request){
+    public BaseResponse<Integer> updateUser(@RequestBody User user,HttpServletRequest request){
         //校验参数是否为空
         if(user==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //校验权限
         User loginUser = userService.getLoginUser(request);
-        //触发更新
-        Integer userUpdate = userService.updateUser(user,loginUser);
+        int userUpdate = userService.updateUser(user,loginUser);
         return ResultUtils.success(userUpdate);
 
     }

@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.example.chenduoduo.Constant.UserConstant.ADMIN_ROLE;
+import static org.example.chenduoduo.constant.UserConstant.ADMIN_ROLE;
 
 /**
  * @author luochen
@@ -218,15 +218,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public Integer updateUser(User user, User loginUser) {
-        long userId=user.getId();
-        if (userId<=0){
+        if (loginUser.getId()<=0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        //分管理员和普通用户,修改信息的逻辑不同
-        if (isAdmin(loginUser)&&user.getId()!= loginUser.getId()) {
+        //管理员可以修改所有人的信息，普通用户只能修改自己信息
+        if (!isAdmin(loginUser)&&user.getId()!= loginUser.getId()) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
-        User userById = userMapper.selectById(userId);
+        User userById = userMapper.selectById(user.getId());
         if(userById==null){
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }

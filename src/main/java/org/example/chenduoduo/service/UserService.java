@@ -9,9 +9,7 @@ import java.util.List;
 /**
  * @author luochen
  * @description 针对表user的服务类
- * 准确来说是注册功能
  * @createDate 2025-04-08 15:43:08
- * @createdate 2025-04-08 19:43:08
  */
 public interface UserService extends IService<User> {
 
