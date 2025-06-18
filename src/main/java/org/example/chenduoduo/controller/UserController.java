@@ -13,10 +13,13 @@ import org.example.chenduoduo.model.User;
 import org.example.chenduoduo.model.request.UserLoginRequest;
 import org.example.chenduoduo.model.request.UserRegisterRequest;
 import org.example.chenduoduo.service.UserService;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import static org.example.chenduoduo.constant.UserConstant.USER_LOGIN_STATE;
 
@@ -29,6 +32,8 @@ import static org.example.chenduoduo.constant.UserConstant.USER_LOGIN_STATE;
 public class UserController {
     @Resource
     private UserService userService;
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
 
     @PostMapping("/register")
     public BaseResponse<Long> register(@RequestBody UserRegisterRequest userRegisterRequest){
@@ -45,7 +50,6 @@ public class UserController {
         long result= userService.userRegister(userAccount,userPassword,checkPassword,planetCode);
         return ResultUtils.success(result);
     }
-
     @PostMapping("/login")
     public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
         if(userLoginRequest == null){
@@ -59,10 +63,6 @@ public class UserController {
         User user= userService.userLogin(userAccount,userPassword,request);
         return ResultUtils.success(user);
     }
-
-    /**
-     * 注销
-     */
     @PostMapping("/logout")
     public BaseResponse<Integer>usersLogout(HttpServletRequest request){
         if(request == null){
@@ -71,7 +71,6 @@ public class UserController {
         int result=userService.userLogout(request);
         return ResultUtils.success(result);
     }
-
     @GetMapping("/current")
     public BaseResponse<User> getCurrentUser(HttpServletRequest request){
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
@@ -85,7 +84,6 @@ public class UserController {
         User safetyUser = userService.getSafetyUser(user);
         return ResultUtils.success(safetyUser);
     }
-
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request){
         //仅管理员可以查询
@@ -112,10 +110,23 @@ public class UserController {
     }
     @GetMapping("/recommend")
     public BaseResponse<Page<User>> recommendUsers(int pageSize,int pageNum,HttpServletRequest request){
+        User loginUser=userService.getLoginUser(request);
+        //缓存key
+        String redisKey=String.format("chenduoduo:user:recommed:%s",loginUser.getId());
+        //缓存有效期
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        //先查询缓存中是否含有对应的页面数据，如果有缓存直接读缓存中的内容
+        Page<User> userPage = (Page<User>) valueOperations.get(redisKey);
+        if(userPage != null){
+            return ResultUtils.success(userPage);
+        }
+        //如果没有缓存，则从数据库中查询
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         //对当前用户进行分页处理
-        Page<User> userList = userService.page(new Page<>(pageNum,  pageSize), queryWrapper);
-        return ResultUtils.success(userList);
+        userPage = userService.page(new Page<>(pageNum,  pageSize), queryWrapper);
+        //写缓存
+        valueOperations.set(redisKey,userPage,30000, TimeUnit.MILLISECONDS);
+        return ResultUtils.success(userPage);
     }
     @PostMapping("/update")
     public BaseResponse<Integer> updateUser(@RequestBody User user,HttpServletRequest request){
