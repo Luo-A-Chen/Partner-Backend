@@ -49,4 +49,15 @@ public class UserTeam {
      * 是否删除
      */
     private Integer isDelete;
+
+    public void setUserId(long userId) {
+        
+    }
+
+    public void setTeamId(Long teamId) {
+    }
+
+    public Long getUserId() {
+        return null;
+    }
 }

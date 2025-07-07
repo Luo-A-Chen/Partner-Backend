@@ -69,4 +69,12 @@ public class Team {
      * 是否删除
      */
     private Integer isDelete;
+
+    public long getUserId() {
+        return 0;
+    }
+
+    public void setUserId(Long nextTeamLeaderId) {
+
+    }
 }
