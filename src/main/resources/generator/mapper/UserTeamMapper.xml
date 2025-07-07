@@ -2,21 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.example.chenduoduo.mapper.TagMapper">
+<mapper namespace="generator.mapper.UserTeamMapper">
 
-    <resultMap id="BaseResultMap" type="org.example.chenduoduo.model.domain.Tag">
+    <resultMap id="BaseResultMap" type="generator.domain.UserTeam">
             <id property="id" column="id" />
+            <result property="userld" column="userld" />
+            <result property="teamld" column="teamld" />
+            <result property="joinTime" column="joinTime" />
             <result property="createTime" column="createTime" />
             <result property="updateTime" column="updateTime" />
             <result property="isDelete" column="isDelete" />
-            <result property="userId" column="userId" />
-            <result property="tagName" column="tagName" />
-            <result property="isParent" column="isParent" />
-            <result property="tagLayer" column="tagLayer" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,createTime,updateTime,isDelete,userId,tagName,
-        isParent,tagLayer
+        id,userld,teamld,joinTime,createTime,updateTime,
+        isDelete
     </sql>
 </mapper>

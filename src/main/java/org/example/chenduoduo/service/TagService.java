@@ -1,6 +1,6 @@
 package org.example.chenduoduo.service;
 
-import org.example.chenduoduo.model.Tag;
+import org.example.chenduoduo.model.domain.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

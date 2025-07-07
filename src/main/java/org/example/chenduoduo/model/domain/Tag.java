@@ -1,4 +1,4 @@
-package org.example.chenduoduo.model;
+package org.example.chenduoduo.model.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

@@ -1,7 +1,7 @@
 package org.example.chenduoduo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.example.chenduoduo.model.Tag;
+import org.example.chenduoduo.model.domain.Tag;
 import org.example.chenduoduo.service.TagService;
 import org.example.chenduoduo.mapper.TagMapper;
 import org.springframework.stereotype.Service;

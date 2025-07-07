@@ -1,6 +1,6 @@
 package org.example.chenduoduo.mapper;
 
-import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.model.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

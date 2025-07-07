@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.example.chenduoduo.common.ErrorCode;
 import org.example.chenduoduo.exception.BusinessException;
-import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.model.domain.User;
 import org.example.chenduoduo.service.UserService;
 import org.example.chenduoduo.mapper.UserMapper;
 import org.springframework.stereotype.Service;
@@ -218,16 +218,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public Integer updateUser(User user, User loginUser) {
-        if (loginUser.getId()<=0){
+        long userId = user.getId();
+        if (userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //管理员可以修改所有人的信息，普通用户只能修改自己信息
-        if (!isAdmin(loginUser)&&user.getId()!= loginUser.getId()) {
+        if (!isAdmin(loginUser) && userId != loginUser.getId()) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
-        User userById = userMapper.selectById(user.getId());
-        if(userById==null){
-            throw new BusinessException(ErrorCode.NULL_ERROR);
+        User oldUser = userMapper.selectById(userId);
+        if (oldUser == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
         }
         return userMapper.updateById(user);
     }

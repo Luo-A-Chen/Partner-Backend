@@ -1,7 +1,7 @@
 package org.example.chenduoduo.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -66,4 +66,5 @@ public interface UserService extends IService<User> {
      */
     boolean isAdmin(HttpServletRequest request);
     boolean isAdmin(User user);
+
 }

@@ -3,7 +3,7 @@ package org.example.chenduoduo.job;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
-import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.model.domain.User;
 import org.example.chenduoduo.service.UserService;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;

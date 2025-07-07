@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.example.chenduoduo.common.BaseResponse;
 import org.example.chenduoduo.common.ErrorCode;
 import org.example.chenduoduo.common.ResultUtils;
 import org.example.chenduoduo.exception.BusinessException;
-import org.example.chenduoduo.model.User;
+import org.example.chenduoduo.model.domain.User;
 import org.example.chenduoduo.model.request.UserLoginRequest;
 import org.example.chenduoduo.model.request.UserRegisterRequest;
 import org.example.chenduoduo.service.UserService;
@@ -24,11 +25,13 @@ import java.util.stream.Collectors;
 import static org.example.chenduoduo.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
+ * 用户接口
  * @author luochen
  */
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = {"http://localhost:5173"},allowCredentials = "true")
+@Slf4j
 public class UserController {
     @Resource
     private UserService userService;

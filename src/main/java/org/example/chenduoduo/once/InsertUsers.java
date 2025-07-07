@@ -4,7 +4,7 @@
 //import jakarta.annotation.Resource;
 //import org.apache.commons.lang3.time.StopWatch;
 //import org.example.chenduoduo.mapper.UserMapper;
-//import org.example.chenduoduo.model.User;
+//import org.example.chenduoduo.model.domain.User;
 //import org.springframework.scheduling.annotation.Scheduled;
 //import org.springframework.stereotype.Component;
 //
